@@ -47,10 +47,10 @@ class _ContactDetailScreenState extends State<ContactDetailScreen> {
               itemBuilder: (context,index){
                 Contact contact=contactlist[index];
                 return Card(
-  margin: EdgeInsets.all(8.0),
-  child: Padding(
-    padding: const EdgeInsets.all(16.0),
-    child: Row(
+                   margin: EdgeInsets.all(8.0),
+         child: Padding(
+               padding: const EdgeInsets.all(16.0),
+                     child: Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         contact.pic == null

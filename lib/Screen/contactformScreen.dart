@@ -1,7 +1,7 @@
-// Flutter Form with Camera Icon and Image Picker
-
+import 'package:contact_app_with_api/Service/api.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:http/http.dart' as http;
 import 'dart:io';
 
 class ContactFormScreen extends StatefulWidget {
@@ -26,16 +26,79 @@ class _ContactFormScreenState extends State<ContactFormScreen> {
     }
   }
 
-  void _submitForm() {
+  void _submitUsingQuery() async{
     final name = _nameController.text;
     final number = _numberController.text;
-    final email = _emailController.text;
+    final email=_emailController.text;
+  http.Response response= await API().saveContact(name, number, email);
+  if(response.statusCode==200){
+    showDialog(context: context, builder: (context){
+      return AlertDialog(title: Text('Data Saved'),);
 
-    // Perform submission logic here
-    print('Name: $name, Number: $number, Email: $email');
-    if (_image != null) print('Image Path: ${_image!.path}');
+    });
+
+  }
+  else{
+     showDialog(context: context, builder: (context){
+      return AlertDialog(title: Text('Data not  Saved'),);
+
+    });
+
   }
 
+
+    
+  }
+  void _submitUsingObject() async{
+    final name = _nameController.text;
+    final number = _numberController.text;
+    final email=_emailController.text;
+  http.Response response= await API().saveContactObject({
+    "number":number,
+    "personName":name,
+    "personEmail":email
+  });
+  if(response.statusCode==200){
+    showDialog(context: context, builder: (context){
+      return AlertDialog(title: Text('Data Saved'),);
+
+    });
+
+  }
+  else{
+     showDialog(context: context, builder: (context){
+      return AlertDialog(title: Text('Data not  Saved'),);
+
+    });
+
+  }
+
+
+    
+  }
+ void _submitUsingMultiPart() async{
+    final name = _nameController.text;
+    final number = _numberController.text;
+    final email=_emailController.text;
+ int code= await API().saveUsingMultipart(_image!, name, number, email);
+  if(code==200){
+    showDialog(context: context, builder: (context){
+      return AlertDialog(title: Text('Data Saved'),);
+
+    });
+
+  }
+  else{
+     showDialog(context: context, builder: (context){
+      return AlertDialog(title: Text('Data not  Saved'),);
+
+    });
+
+  }
+
+
+    
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -107,9 +170,22 @@ class _ContactFormScreenState extends State<ContactFormScreen> {
             ),
             SizedBox(height: 24),
             ElevatedButton(
-              onPressed: _submitForm,
-              child: Text('Submit'),
+              onPressed: _submitUsingQuery,
+              child: Text('Submit 1'),
             ),
+            
+            SizedBox(height: 24),
+            ElevatedButton(
+              onPressed: _submitUsingObject,
+              child: Text('Submit 2'),
+            ),
+             SizedBox(height: 24),
+            ElevatedButton(
+              onPressed: _submitUsingMultiPart,
+              child: Text('Submit 3'),
+            ),
+
+
           ],
         ),
       ),
